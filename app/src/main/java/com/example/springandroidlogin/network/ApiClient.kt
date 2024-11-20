@@ -1,6 +1,7 @@
 package com.example.springandroidlogin.network
 
 import android.content.Context
+import android.util.Log
 import com.android.volley.Request
 import com.android.volley.RequestQueue
 import com.android.volley.toolbox.StringRequest
@@ -9,6 +10,7 @@ import com.example.springandroidlogin.DataModules.UserRegister
 
 class ApiClient private constructor(context: Context) {
     private val requestQueue: RequestQueue = Volley.newRequestQueue(context.applicationContext)
+    private val defaultUrl: String = "http://192.168.29.30:8080/api"
 
     companion object {
         @Volatile
@@ -23,15 +25,21 @@ class ApiClient private constructor(context: Context) {
 
     fun registerUser(
         user: UserRegister,
-        url: String,
         onSuccess: (String) -> Unit,
         onError: (String) -> Unit
     ) {
-        val stringRequest = object : StringRequest(Method.POST, url,
+        val url = "/user/register"
+        // Ensuring the URL is correctly formatted
+        val fullUrl = if (defaultUrl.endsWith("/")) "$defaultUrl$url" else "$defaultUrl/$url"
+
+        val stringRequest = object : StringRequest(Method.POST, fullUrl,
             { response ->
+                // If successful, invoke the onSuccess callback with the response message
                 onSuccess(response)
             },
             { error ->
+                Log.e("ApiClient", "Error during registration: ${error.message}")
+                // Handle error if network or server issues occur
                 onError(error.message ?: "An error occurred")
             }
         ) {
