@@ -20,7 +20,7 @@ class MainActivity : AppCompatActivity() {
 
         // Check if a session exists
         if (checkForSession()) {
-
+            startActivity(Intent(this, HomeActivity::class.java))
         }
 
         // Set up click listeners for navigation buttons
@@ -46,17 +46,13 @@ class MainActivity : AppCompatActivity() {
         val sharedPreferences = getSharedPreferences("UserSession", MODE_PRIVATE)
 
         // Retrieve the token from SharedPreferences
-        val token = sharedPreferences.getString("token", null)
-        val firstName = sharedPreferences.getString("firstName", null)
+        val token = sharedPreferences.getString("token",null)
+        val firstName = sharedPreferences.getString("firstName","please login or sign up")
 
         // If no token is found, return false (no session exists)
         if (token.isNullOrEmpty()) {
+            Toast.makeText(this, "No session found. Please log in.", Toast.LENGTH_LONG).show()
             return false
-        }
-
-        // Debugging: Display user name (if exists)
-        if (!firstName.isNullOrEmpty()) {
-            Toast.makeText(this, "Welcome back, $firstName!", Toast.LENGTH_LONG).show()
         }
 
         // Check if the token has expired by calling the API
@@ -74,7 +70,10 @@ class MainActivity : AppCompatActivity() {
                 isSessionValid = false
             }
         )
-
+        // Debugging: Display user name (if exists)
+        if (!firstName.isNullOrEmpty()&&isSessionValid) {
+            Toast.makeText(this, "Welcome back, $firstName!", Toast.LENGTH_LONG).show()
+        }
         // Return the session validity status
         return isSessionValid
     }
