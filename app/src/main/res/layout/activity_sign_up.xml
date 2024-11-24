@@ -7,7 +7,7 @@
     android:padding="10dp"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".Auth.SignUp">
+    tools:context=".activitys.Auth.SignUp">
 
     <ImageView
         android:id="@+id/imageView2"

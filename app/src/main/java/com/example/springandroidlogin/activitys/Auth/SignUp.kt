@@ -1,13 +1,9 @@
-package com.example.springandroidlogin.Auth
+package com.example.springandroidlogin.activitys.Auth
 
 import android.os.Bundle
-import android.util.Log
-import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.example.springandroidlogin.DataModules.UserRegister
-import com.example.springandroidlogin.MainActivity
-import com.example.springandroidlogin.R
 import com.example.springandroidlogin.databinding.ActivitySignUpBinding
 import com.example.springandroidlogin.helpers.StringHelper
 import com.example.springandroidlogin.network.ApiClient

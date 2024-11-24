@@ -66,6 +66,7 @@ class ApiClient private constructor(context: Context) {
 
         requestQueue.add(stringRequest)
     }
+    //END OF REGISTER USER
 
     fun loginUser(
         user: UserLoginRequest,
@@ -115,4 +116,48 @@ class ApiClient private constructor(context: Context) {
         // Add the request to the request queue
         requestQueue.add(jsonObjectRequest)
     }
+    //END OF LOGIN
+
+    fun isTokenExpired(
+        token: String,
+        onSuccess: (Boolean) -> Unit,
+        onError: (String) -> Unit
+    ) {
+        val stringRequest = object : StringRequest(
+            Method.POST,
+            apiLinkHelper.isTokenExpiredApiUri(),
+            { response ->
+                try {
+                    // Parse the response (expected to be a boolean)
+                    val isExpired = response.toBoolean()
+                    Log.e("ApiClient", "Token is expired: $isExpired")
+                    onSuccess(isExpired)
+                } catch (e: Exception) {
+                    Log.e("ApiClient", "Error parsing token expiry response: ${e.message}")
+                    onError("Failed to parse the server response.")
+                }
+            },
+            { error ->
+                // Handle error response
+                if (error.networkResponse != null) {
+                    val errorResponse = String(error.networkResponse.data)
+                    Log.e("ApiClient", "Error during token expiry check: $errorResponse")
+                    onError(errorResponse)
+                } else {
+                    Log.e("ApiClient", "Error during token expiry check: ${error.message}")
+                    onError(error.message ?: "An unknown error occurred.")
+                }
+            }
+        ) {
+            override fun getParams(): Map<String, String> {
+                return mapOf(
+                    "token" to token
+                )
+            }
+        }
+
+        // Add the request to the queue
+        requestQueue.add(stringRequest)
+    }
+    //END OF IS TOKEN EXPIRED
 }

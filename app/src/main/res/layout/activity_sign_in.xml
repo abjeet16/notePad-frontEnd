@@ -7,7 +7,7 @@
     android:background="@drawable/alt_img"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".Auth.SignIn">
+    tools:context=".activitys.Auth.SignIn">
 
     <ImageView
         android:id="@+id/imageView2"
