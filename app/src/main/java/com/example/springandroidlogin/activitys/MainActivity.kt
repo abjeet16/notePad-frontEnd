@@ -41,7 +41,7 @@ class MainActivity : AppCompatActivity() {
     private fun navigateToSignUp() {
         val intent = Intent(this, SignUp::class.java)
         startActivity(intent)
-    }
+    }//
     private fun checkForSession(): Boolean {
         val sharedPreferences = getSharedPreferences("UserSession", MODE_PRIVATE)
 
