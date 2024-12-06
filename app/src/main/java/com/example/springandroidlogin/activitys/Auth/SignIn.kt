@@ -9,6 +9,7 @@ import com.example.springandroidlogin.DataModules.userLogin.UserLoginRequest
 import com.example.springandroidlogin.DataModules.userLogin.UserLoginResponse
 import com.example.springandroidlogin.activitys.MainActivity
 import com.example.springandroidlogin.databinding.ActivitySignInBinding
+import com.example.springandroidlogin.helpers.SharedPreferencesHelper
 import com.example.springandroidlogin.network.ApiClient
 
 class SignIn : AppCompatActivity() {
@@ -44,7 +45,8 @@ class SignIn : AppCompatActivity() {
             user = user,
             onSuccess = { response ->
                 // Save user session
-                saveUserSession(response)
+                val helper = SharedPreferencesHelper(this) // 'this' is an Activity or Context
+                helper.saveUserSession(response)
 
                 // Welcome the user
                 Toast.makeText(this, "Welcome, ${response.firstName}!", Toast.LENGTH_LONG).show()
@@ -68,20 +70,5 @@ class SignIn : AppCompatActivity() {
     fun goToSignUpAct(view: View) {
         val intent = Intent(this, SignUp::class.java)
         startActivity(intent)
-    }
-
-    private fun saveUserSession(response: UserLoginResponse) {
-        val sharedPreferences = getSharedPreferences("UserSession", MODE_PRIVATE)
-        val editor = sharedPreferences.edit()
-
-        // Save user details
-        editor.putString("token", response.token)
-        editor.putInt("userId", response.userId ?: 0) // Provide a default value of 0 for userId
-        editor.putString("username", response.username)
-        editor.putString("firstName", response.firstName ?: "") // Default to empty string
-        editor.putString("lastName", response.lastName ?: "")   // Default to empty string
-
-        // Apply changes
-        editor.apply()
     }
 }

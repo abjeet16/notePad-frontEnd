@@ -8,6 +8,7 @@ import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import com.example.springandroidlogin.R
 import com.example.springandroidlogin.databinding.ActivityHomeBinding
+import com.example.springandroidlogin.helpers.SharedPreferencesHelper
 
 class HomeActivity : AppCompatActivity() {
     private val binding by lazy {
@@ -17,16 +18,15 @@ class HomeActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
 
-        logout()//
+        logout()
     }
 
     private fun logout() {
         binding.logout.setOnClickListener {
-            val sharedPreferences = getSharedPreferences("UserSession", MODE_PRIVATE)
-            val editor = sharedPreferences.edit()
-            editor.remove("token")
-            editor.apply()
-            startActivity(Intent(this, MainActivity::class.java))
+            val helper = SharedPreferencesHelper(this) // 'this' is an Activity or Context
+            helper.deleteUserSession()
+            val intent = Intent(this, MainActivity::class.java)
+            startActivity(intent)
             finish()
         }
     }
